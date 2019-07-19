@@ -4,6 +4,8 @@
 
 -- init db with this command:
 -- $ mysql -u username -p password code_snippet_app < "C:\<pathToSQLfile>\db.sql"
+-- OR
+-- source <pathToSqlFile>/db.sql
 
 
 CREATE TABLE IF NOT EXISTS users (

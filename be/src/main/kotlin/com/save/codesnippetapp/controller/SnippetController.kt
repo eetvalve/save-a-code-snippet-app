@@ -10,6 +10,10 @@ import com.save.codesnippetapp.service.SnippetService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
+import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.DeleteMapping
+
 
 @RestController
 @RequestMapping("/api")
@@ -19,43 +23,6 @@ class SnippetController(private val titleRepository: TitleRepository,
                         private val snippetService: SnippetService) {
 
     private val PUBLIC_TITLES: Int = 1
-
-    /*
-    @GetMapping("/titles")
-    fun getAllTitles(): List<Title> = titleRepository.findAll()
-
-
-    @GetMapping("/titleNamesList/{name}")
-    fun getTitleNamesList(@PathVariable(value = "name") name: String): List<String> {
-        val titlesRes: List<Title> = titleRepository.findByTitleContaining(name)
-        val titleNames: MutableList<String> = mutableListOf<String>()
-
-        for (title in titlesRes) {
-            titleNames.add(title.title)
-        }
-
-        return titleNames
-    }
-
-    @GetMapping("/snippets/{id}")
-    fun getSnippets(@PathVariable(value = "id") titleId: Int): List<Snippet> =
-            snippetRepository.getAllByTitleTitleId(titleId)
-
-
-    @PostMapping("/addSnippet")
-    fun addSnippet(@Valid @RequestBody snippet: Snippet): Snippet? {
-
-        var titleRes: Title? = titleRepository.getFirstByTitleIgnoreCase(snippet.title.title)
-
-        // if not exists -> create
-        if (titleRes == null) {
-           titleRes = titleRepository.save(snippet.title)
-        }
-
-        snippet.title.titleId = titleRes.titleId;
-        return snippetRepository.save(snippet)
-    }
-    */
 
     // get title names by regexp search input
     @GetMapping("/titleNamesList/{userId}/{name}")
@@ -79,7 +46,7 @@ class SnippetController(private val titleRepository: TitleRepository,
             titleOwnersRepository.getAllByOwner_UserIdOrOwner_UserId(userId, PUBLIC_TITLES)
 
 
-    @PostMapping("/addSnippet")
+    @PostMapping("/snippet")
     fun addSnippet(@Valid @RequestBody snippet: Snippet): Snippet {
 
         val titleRes: Title = snippetService.createTitleIfNotExist(snippet.title)
@@ -89,5 +56,30 @@ class SnippetController(private val titleRepository: TitleRepository,
         return snippetRepository.save(snippet)
     }
 
-    // todo edit, delete
+    @PutMapping("/snippet")
+    fun editSnippet(@Valid @RequestBody snippet: Snippet): Snippet {
+
+        val titleRes: Title = snippetService.createTitleIfNotExist(snippet.title)
+        snippetService.createTitleOwnershipIfNotExist(titleRes, snippet)
+
+        snippet.title.titleId = titleRes.titleId;
+        return snippetRepository.save(snippet)
+    }
+
+
+    @DeleteMapping("/snippet/{userId}/{snippetId}")
+    fun deleteSnippet(@PathVariable userId: Int?, @PathVariable snippetId: Int?): ResponseEntity<Int> {
+
+        val snippet: Snippet? = snippetRepository.getBySnippetIdAndOwner_UserId(snippetId, userId)
+
+        if (snippet != null) {
+
+            val isTitleCheckDone = snippetService.checkTitleUsages(snippet)
+            if (isTitleCheckDone) {
+                return snippetService.deleteSnippet(snippet.snippetId)
+            }
+
+        }
+        return ResponseEntity(HttpStatus.NOT_FOUND)
+    }
 }

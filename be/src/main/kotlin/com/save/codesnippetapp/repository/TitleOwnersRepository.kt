@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
 import org.springframework.stereotype.Repository
+import org.springframework.transaction.annotation.Transactional
 
 @Repository
 interface TitleOwnersRepository : JpaRepository<TitleOwners, Int> {
@@ -18,8 +19,6 @@ interface TitleOwnersRepository : JpaRepository<TitleOwners, Int> {
             " INNER JOIN titles i ON t.title_id = i.title_id WHERE t.owner = :owner AND i.title LIKE CONCAT('%',:title,'%') OR t.owner = 1 AND i.title LIKE CONCAT('%',:title,'%')", nativeQuery = true)
     fun findAllMatchingTitles(@Param("owner") owner: Int, @Param("title") title: String): List<String>?
 
-
-   // mysql> select titles.title from title_owners INNER JOIN titles ON title_owners.title_id = titles.title_id WHERE title_owners.owner = 3;
-
-
+    @Transactional
+    fun deleteByOwner_UserIdAndTitle_TitleId(owner: Int, title: Int): Int?
 }
