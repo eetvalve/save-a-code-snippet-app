@@ -7,6 +7,8 @@ import com.save.codesnippetapp.model.User
 import com.save.codesnippetapp.repository.SnippetRepository
 import com.save.codesnippetapp.repository.TitleOwnersRepository
 import com.save.codesnippetapp.repository.TitleRepository
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 
 @Service
@@ -20,7 +22,6 @@ class SnippetService(private val titleRepository: TitleRepository,
         if (title == null) {
             title = titleRepository.save(titleObj)
         }
-
         return title
     }
 
@@ -31,7 +32,7 @@ class SnippetService(private val titleRepository: TitleRepository,
         val PUBLIC_USER_NAME = "GLOBAL"
 
         if (snippet.isPrivateSnippet) {
-             checkTitleOwnership(user, titleObj)
+            checkTitleOwnership(user, titleObj)
         } else {
             user = User(PUBLIC_USER_ID, PUBLIC_USER_NAME, false)
             checkTitleOwnership(user, titleObj)
@@ -44,6 +45,42 @@ class SnippetService(private val titleRepository: TitleRepository,
         if (titleOwnership == null) {
             val titleOwner = TitleOwners(0, titleObj, user)
             titleOwnersRepository.save(titleOwner)
+        }
+    }
+
+    fun checkTitleUsages(snippet: Snippet): Boolean {
+
+        val titleUsages: Int = snippetRepository.findAllTitleUsages(snippet.title.titleId, snippet.owner.userId, snippet.isPrivateSnippet)
+
+        return when (titleUsages == 1) {
+            true -> removeOwnerShip(snippet)
+            false -> true
+        }
+    }
+
+    fun removeOwnerShip(snippet: Snippet): Boolean {
+
+        // public snippet = 1
+        var snippetOwner = 1
+
+        if (snippet.isPrivateSnippet) {
+            snippetOwner = snippet.owner.userId
+        }
+
+        val res: Int? = titleOwnersRepository.deleteByOwner_UserIdAndTitle_TitleId(snippetOwner, snippet.title.titleId)
+
+        if (res == null) {
+            return false
+        }
+        return true
+    }
+
+    fun deleteSnippet(id: Int): ResponseEntity<Int> {
+        val isRemoved = snippetRepository.deleteById(id)
+
+        return when (isRemoved == null) {
+            true -> ResponseEntity(HttpStatus.NOT_FOUND)
+            false -> ResponseEntity(id, HttpStatus.OK)
         }
     }
 }
