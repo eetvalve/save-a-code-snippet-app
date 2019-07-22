@@ -14,7 +14,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.DeleteMapping
 
-
 @RestController
 @RequestMapping("/api")
 class SnippetController(private val titleRepository: TitleRepository,
