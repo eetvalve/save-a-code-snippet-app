@@ -1,0 +1,41 @@
+<template>
+  <div class="snippet-page-container">
+    <snippet-nav-container/>
+
+    <div class="snippet-page-main-content">
+      <add-snippet-container/>
+      <snippet-view-container/>
+    </div>
+
+  </div>
+</template>
+
+<script>
+  import SnippetNavContainer from "../components/snippetPage/snippetNav/SnippetNavContainer";
+  import AddSnippetContainer from "../components/snippetPage/addSnippet/AddSnippetContainer";
+  import SnippetViewContainer from "../components/snippetPage/snippetView/SnippetViewContainer";
+
+  export default {
+    name: "SnippetPage",
+    components: {SnippetViewContainer, AddSnippetContainer, SnippetNavContainer}
+  }
+</script>
+
+<style lang="scss">
+  .snippet-page-container {
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    width: 100%;
+    max-width: 1000px;
+    justify-content: center;
+  }
+
+  .snippet-page-main-content {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    width: 80%;
+  }
+</style>
