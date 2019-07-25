@@ -1,13 +1,33 @@
 <template>
-    
+  <v-card class="card-color mt-0">
+    <v-card-title>
+      <h3 class="font-weight-light">
+        Preview
+      </h3>
+    </v-card-title>
+
+    <v-card-text>
+      <snippet-view-item :item="item" :isPreview="true"/>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script>
+  import SnippetViewItem from "../snippetView/SnippetViewItem";
+
   export default {
-    name: "AddSnippetPreview"
+    name: "AddSnippetPreview",
+    components: {SnippetViewItem},
+    props: {
+      item: {
+        type: Object
+      }
+    }
   }
 </script>
 
-<style scoped>
-
+<style lang="scss">
+  .card-color {
+    background-color: $yellow !important;
+  }
 </style>

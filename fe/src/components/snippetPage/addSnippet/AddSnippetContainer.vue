@@ -1,18 +1,40 @@
 <template>
-  <div class="add-snippet-container">
-     add new
-    <add-snippet-input-section/>
-    <add-snippet-preview/> <!-- -->
-  </div>
+  <section class="add-snippet-container">
+    <add-snippet-input-section
+      v-on:addNewHasValues="handleAddNewHasValues"
+      v-on:cardOpened="isCardOpen"
+    />
+    <div v-if="cardOpen && showPreview">
+      <add-snippet-preview :item="item"/> <!-- -->
+    </div>
+  </section>
 
 </template>
 
 <script>
   import AddSnippetInputSection from "./AddSnippetInputSection";
   import AddSnippetPreview from "./AddSnippetPreview";
+
   export default {
     name: "addSnippetContainer",
-    components: {AddSnippetPreview, AddSnippetInputSection}
+    components: {AddSnippetPreview, AddSnippetInputSection},
+    data() {
+      return {
+        showPreview: false,
+        cardOpen: false,
+        item: {}
+      }
+    },
+    methods: {
+      handleAddNewHasValues(hasValue, itemObject) {
+        this.showPreview = hasValue;
+        this.item = itemObject;
+      },
+      isCardOpen(flag) {
+        console.log('cardOpen: ', flag)
+        this.cardOpen = flag
+      }
+    }
   }
 </script>
 
