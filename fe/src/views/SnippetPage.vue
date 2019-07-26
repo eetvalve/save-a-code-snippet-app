@@ -35,6 +35,7 @@
   }
 
   .snippet-page-container {
+    margin-top: 60px;
     margin-left: auto;
     margin-right: auto;
     display: flex;
@@ -51,5 +52,11 @@
     flex-direction: column;
     flex-wrap: nowrap;
     width: 80%;
+  }
+
+  @media screen and (max-width: 767px) {
+    .snippet-page-main-content {
+      width: 100%;
+    }
   }
 </style>

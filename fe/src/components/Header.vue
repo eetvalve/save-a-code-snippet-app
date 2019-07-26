@@ -1,6 +1,6 @@
 <template>
   <v-layout column nowrap class="mb-2">
-    <v-toolbar class="elevation-0">
+    <v-toolbar fixed class="elevation-0 toolbar-custom">
 
       <v-toolbar-title center class="pl-3">
         <div class="title-breakpoint">
@@ -84,6 +84,10 @@
     width: 100vw;
     height: 2rem;
     margin-bottom: 3rem;
+  }
+
+  .toolbar-custom {
+    z-index: 99999;
   }
 
   .v-icon--left {

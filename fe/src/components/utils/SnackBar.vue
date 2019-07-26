@@ -1,5 +1,6 @@
 <template>
   <v-snackbar
+    class="snacbar-custom"
     top
     v-model="snackbar.visible"
   >
@@ -31,6 +32,9 @@
   }
 </script>
 
-<style scoped>
+<style lang="scss">
+  .snacbar-custom {
+    z-index: 999999;
+  }
 
 </style>

@@ -5,7 +5,7 @@
 
         <v-list-tile>
           <v-list-tile-content>
-            <v-list-tile-title >
+            <v-list-tile-title class="list-item-custom" @click="getSnippetsByTitle(item)">
               {{item.title}}
             </v-list-tile-title>
           </v-list-tile-content>
@@ -32,10 +32,18 @@
           },
         ]
       }
+    },
+    methods: {
+      getSnippetsByTitle(item) {
+        this.$emit('clicked', item)
+      }
     }
   }
 </script>
 
-<style scoped>
-
+<style lang="scss">
+  .list-item-custom:hover {
+    cursor: pointer;
+    color: $blue;
+  }
 </style>

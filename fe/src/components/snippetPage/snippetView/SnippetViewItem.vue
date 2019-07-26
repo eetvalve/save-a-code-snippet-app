@@ -10,7 +10,7 @@
       </v-flex>
 
 
-      <v-flex md2 sm2>
+      <v-flex md2 sm2 xs4>
         <v-card-actions>
           <v-btn :disabled="isPreview"
                  small icon class="v-btn--outline" color="primary">
