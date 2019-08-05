@@ -1,16 +1,26 @@
 <template>
-  <v-layout row nowrap class="nav-container">
+  <v-layout 
+    row 
+    nowrap 
+    class="nav-container">
 
-    <v-layout row nowrap class="nav-container-list"
-              :class="openMobileNav ? 'nav-container-list-open' : 'nav-container-list-closed'">
+    <v-layout 
+      :class="openMobileNav ? 'nav-container-list-open' : 'nav-container-list-closed'" 
+      row 
+      nowrap
+      class="nav-container-list">
       <v-card>
         <snippet-nav-search-bar/> <!--emit seach here -->
         <snippet-nav-items-list @clicked="onClickChild"/> <!--input list updates from here to items list -->
       </v-card>
 
-      <v-card depressed class="mobile-nav-open elevation-1">
+      <v-card 
+        depressed 
+        class="mobile-nav-open elevation-1">
         <v-card-actions>
-          <v-btn @click="openMobileNav = !openMobileNav" icon>
+          <v-btn 
+            icon 
+            @click="openMobileNav = !openMobileNav">
             <v-icon :class="{rotate : openMobileNav}">arrow_forward_ios</v-icon>
           </v-btn>
         </v-card-actions>

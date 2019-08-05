@@ -1,8 +1,8 @@
 <template>
   <section class="add-snippet-container">
     <add-snippet-input-section
-      v-on:addNewHasValues="handleAddNewHasValues"
-      v-on:cardOpened="isCardOpen"
+      @addNewHasValues="handleAddNewHasValues"
+      @cardOpened="isCardOpen"
     />
     <div v-if="cardOpen && showPreview">
       <add-snippet-preview :item="item"/> <!-- -->
@@ -16,7 +16,7 @@
   import AddSnippetPreview from "./AddSnippetPreview";
 
   export default {
-    name: "addSnippetContainer",
+    name: "AddSnippetContainer",
     components: {AddSnippetPreview, AddSnippetInputSection},
     data() {
       return {

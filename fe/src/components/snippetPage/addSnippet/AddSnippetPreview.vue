@@ -7,7 +7,9 @@
     </v-card-title>
 
     <v-card-text>
-      <snippet-view-item :item="item" :isPreview="true"/>
+      <snippet-view-item 
+        :item="item" 
+        :is-preview="true"/>
     </v-card-text>
   </v-card>
 </template>

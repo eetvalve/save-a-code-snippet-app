@@ -1,7 +1,5 @@
 <template>
   <div class="parent-container">
-    <main-header/>
-
 
     <div class="snippet-page-container">
       <snippet-nav-container/>

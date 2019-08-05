@@ -11,7 +11,9 @@
     <v-list class="list-width custom-color">
       <template v-for="(item, index) in items">
 
-        <snippet-view-item :item="item" :isPreview="false"/>
+        <snippet-view-item 
+          :item="item" 
+          :is-preview="false"/>
 
       </template>
     </v-list>

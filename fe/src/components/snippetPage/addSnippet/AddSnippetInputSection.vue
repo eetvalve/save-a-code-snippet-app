@@ -1,54 +1,63 @@
 <template>
-  <v-layout column wrap>
+  <v-layout 
+    column 
+    wrap>
     <v-card class="elevation-2">
 
 
       <v-card-title class="headline font-weight-light">
         Add new snippet
 
-        <v-spacer></v-spacer>
+        <v-spacer/>
 
-        <v-btn @click="cardOpen = !cardOpen" icon>
+        <v-btn 
+          icon 
+          @click="cardOpen = !cardOpen">
           <v-icon
+            :class="{rotate: cardOpen}"
             color="primary"
             large
-            :class="{rotate: cardOpen}"
-            >
+          >
             control_point
           </v-icon>
         </v-btn>
       </v-card-title>
 
-      <v-card-text v-if="cardOpen" class="pb-0 pt-1">
+      <v-card-text 
+        v-if="cardOpen" 
+        class="pb-0 pt-1">
 
         <v-layout column>
-          <v-text-field class="text-field-height"
-                        label="Language/Program name"
+          <v-text-field 
+            class="text-field-height"
+            label="Language/Program name"
 
-          ></v-text-field>
-
-
-          <v-text-field class="text-field-height"
-                        label="Add Description"
-                        v-model="item.description"
-          ></v-text-field>
+          />
 
 
-          <v-textarea class="textarea-field-height"
-                      name="input-7-1"
-                      label="Add Snippet here"
-                      value=""
-                      hint="Html elements allowed here"
-                      rows="1"
-                      v-model="item.snippet"
-          ></v-textarea>
+          <v-text-field 
+            v-model="item.description"
+            class="text-field-height"
+            label="Add Description"
+          />
+
+
+          <v-textarea 
+            v-model="item.snippet"
+            class="textarea-field-height"
+            name="input-7-1"
+            label="Add Snippet here"
+            value=""
+            hint="Html elements allowed here"
+            rows="1"
+          />
         </v-layout>
 
         <v-card-actions class="pt-0">
           <v-flex class="text-xs-right">
             <v-btn
-              @click="addNewSnippet()"
-              class="info right">
+              class="info right"
+              @click="addNewSnippet()">
               add
             </v-btn>
           </v-flex>
@@ -79,6 +88,18 @@
         }
       }
     },
+    computed: {
+      inputTextLength() {
+        return this.item.description.length > 0 || this.item.snippet.length > 0 ? this.$emit('addNewHasValues', true, this.item) : this.$emit('addNewHasValues', false, null)
+      },
+      cardOpened() {
+        return this.$emit('cardOpened', this.cardOpen)
+      }
+    },
+    watch: {
+      inputTextLength(newVal) {},
+      cardOpened(newVal) {},
+    },
     methods: {
       addNewSnippet() {
 
@@ -93,18 +114,6 @@
         }
       }
     },
-    computed: {
-      inputTextLength() {
-        return this.item.description.length > 0 || this.item.snippet.length > 0 ? this.$emit('addNewHasValues', true, this.item) : this.$emit('addNewHasValues', false, null)
-      },
-      cardOpened() {
-        return this.$emit('cardOpened', this.cardOpen)
-      }
-    },
-    watch: {
-      inputTextLength(newVal) {},
-      cardOpened(newVal) {},
-    }
   }
 </script>
 

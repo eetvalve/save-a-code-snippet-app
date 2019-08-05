@@ -3,38 +3,65 @@
   <v-card class="mb-3">
     <v-card-title>
 
-      <v-flex md10 sm10>
+      <v-flex
+        md10
+        sm10>
         <h3 class="font-weight-medium">
-          {{item.description}}
+          {{ item.description }}
         </h3>
       </v-flex>
 
 
-      <v-flex md2 sm2 xs4>
+      <v-flex
+        md2
+        sm2
+        xs4>
         <v-card-actions>
-          <v-btn :disabled="isPreview"
-                 small icon class="v-btn--outline" color="primary">
+          <v-btn
+            :disabled="isPreview"
+            small
+            icon
+            class="v-btn--outline"
+            color="primary">
             <v-tooltip bottom>
-              <v-icon slot="activator" small color="primary">account_box</v-icon>
+              <v-icon
+                slot="activator"
+                small
+                color="primary">account_box
+              </v-icon>
               <span>Owner: edu
-            <br/>
-              visibility: private
-            </span>
+                <br>
+                visibility: private
+              </span>
             </v-tooltip>
           </v-btn>
 
-          <v-btn :disabled="isPreview"
-                 small text icon color="primary">
+          <v-btn
+            :disabled="isPreview"
+            small
+            text
+            icon
+            color="primary">
             <v-tooltip bottom>
-              <v-icon slot="activator" small>edit</v-icon>
+              <v-icon
+                slot="activator"
+                small>edit
+              </v-icon>
               <span>edit</span>
             </v-tooltip>
           </v-btn>
 
-          <v-btn :disabled="isPreview"
-                 small text icon color="error">
+          <v-btn
+            :disabled="isPreview"
+            small
+            text
+            icon
+            color="error">
             <v-tooltip bottom>
-              <v-icon slot="activator" small>delete</v-icon>
+              <v-icon
+                slot="activator"
+                small>delete
+              </v-icon>
               <span>delete</span>
             </v-tooltip>
           </v-btn>
@@ -45,7 +72,9 @@
 
     <v-card-text class="pt-0">
 
-      <div :id="'snippet-position-' + item.id" class="snippet-content-container pa-2">
+      <div
+        :id="'snippet-position-' + item.id"
+        class="snippet-content-container pa-2">
         <!-- {{item.snippet}} -->
       </div>
 
@@ -71,15 +100,6 @@
         filterBtnTTip: false
       }
     },
-    methods: {
-      stringToHtml(item) {
-        const injectPosition = document.getElementById("snippet-position-" + item.id)
-        injectPosition.innerHTML = item.snippet;
-      }
-    },
-    mounted() {
-      this.stringToHtml(this.item)
-    },
     watch: {
       item: {
         // the callback will be called immediately after the start of the observation
@@ -92,7 +112,16 @@
         },
         deep: true
       }
-    }
+    },
+    mounted() {
+      this.stringToHtml(this.item)
+    },
+    methods: {
+      stringToHtml(item) {
+        const injectPosition = document.getElementById("snippet-position-" + item.id)
+        injectPosition.innerHTML = item.snippet;
+      }
+    },
   }
 </script>
 

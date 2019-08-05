@@ -1,8 +1,8 @@
 <template>
   <v-snackbar
+    v-model="snackbar.visible"
     class="snacbar-custom"
     top
-    v-model="snackbar.visible"
   >
     {{ snackbar.text }}
     <v-btn
@@ -18,17 +18,17 @@
 <script>
   export default {
     name: "SnackBar",
-    data() {
-      return {
-
-      }
-    },
     props: {
       snackbar: {
         type: Object
       },
 
-    }
+    },
+    data() {
+      return {
+
+      }
+    },
   }
 </script>
 

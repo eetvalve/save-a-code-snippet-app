@@ -1,10 +1,8 @@
-<template>
-
-</template>
+<template/>
 
 <script>
   export default {
-    name: "loading-screen"
+    name: "LoadingScreen"
   }
 </script>
 

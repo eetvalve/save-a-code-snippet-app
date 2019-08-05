@@ -1,11 +1,10 @@
 // vue.config.js
 module.exports = {
-    css: {
+  css: {
     loaderOptions: {
       sass: {
         data: `
           @import "@/assets/styleGuide/colors.scss";
-         
         `
       }
     }

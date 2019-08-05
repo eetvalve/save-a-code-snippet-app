@@ -5,8 +5,10 @@
 
         <v-list-tile>
           <v-list-tile-content>
-            <v-list-tile-title class="list-item-custom" @click="getSnippetsByTitle(item)">
-              {{item.title}}
+            <v-list-tile-title 
+              class="list-item-custom" 
+              @click="getSnippetsByTitle(item)">
+              {{ item.title }}
             </v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>

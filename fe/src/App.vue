@@ -7,6 +7,7 @@
         <router-link to="/about">About</router-link>
       </div>
       -->
+      <main-header/>
       <router-view/>
     </v-app>
   </div>
@@ -20,3 +21,9 @@
   #nav {
   }
 </style>
+<script>
+  import MainHeader from "./components/Header";
+  export default {
+    components: {MainHeader}
+  }
+</script>
