@@ -1,12 +1,12 @@
 <template>
   <section class="quick-link-section">
-      quick links
+    quick links
   </section>
 </template>
 
 <script>
   export default {
-    name: "dashboard-quick-link-section"
+    name: "DashboardQuickLinkSection"
   }
 </script>
 

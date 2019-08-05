@@ -2,7 +2,7 @@
 
 <script>
   export default {
-    name: "LoadingScreen"
+    name: "AuthPageContainer"
   }
 </script>
 

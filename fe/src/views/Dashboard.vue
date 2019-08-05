@@ -2,8 +2,8 @@
   <div class="dashboard">
     <main-header/>
     <div class="dashboard-main-container">
-    <dashboard-main-section/>
-    <dashboard-quick-link-section/>
+      <dashboard-main-section/>
+      <dashboard-quick-link-section/>
     </div>
     <main-footer/>
   </div>
@@ -11,22 +11,22 @@
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue';
-import MainHeader from "../components/Header";
-import MainFooter from "../components/Footer";
-import DashboardMainSection from "../components/dashboard/DashboardMainSection";
-import DashboardQuickLinkSection from "../components/dashboard/DashboardQuickLinkSection";
+  import HelloWorld from '@/components/HelloWorld.vue';
+  import MainHeader from "../components/Header";
+  import MainFooter from "../components/Footer";
+  import DashboardMainSection from "../components/dashboard/DashboardMainSection";
+  import DashboardQuickLinkSection from "../components/dashboard/DashboardQuickLinkSection";
 
-export default {
-  name: 'dashboard',
-  components: {
-    DashboardQuickLinkSection,
-    DashboardMainSection,
-    MainFooter,
-    MainHeader,
-    HelloWorld,
-  },
-};
+  export default {
+    name: 'Dashboard',
+    components: {
+      DashboardQuickLinkSection,
+      DashboardMainSection,
+      MainFooter,
+      MainHeader,
+      HelloWorld,
+    },
+  };
 </script>
 
 <style lang="scss">
