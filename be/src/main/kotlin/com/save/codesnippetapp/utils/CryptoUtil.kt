@@ -38,6 +38,7 @@ class CryptoUtil(@Value("\${crypto.key}") val cryptoKey: String) {
     fun decrypt(token: String?): String? {
         var result: String? = null
 
+        println("token $token")
         if (token != null) {
             try {
                 val stringToByteArray: ByteArray = Base64.getDecoder().decode(token)

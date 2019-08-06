@@ -18,8 +18,7 @@
 
       <v-spacer/>
 
-
-      <v-toolbar-items v-if="loggedUser">
+      <v-toolbar-items v-if="user">
 
         <v-layout
           column
@@ -35,11 +34,11 @@
               class="user-icon"
               color="primary icon">account_box
             </v-icon>
-            <span>user: edu</span>
+            <span>user: {{ user.userName }}</span>
           </v-tooltip>
 
           <span class="header-texts">
-            edudadadsas
+            {{ user.userName }}
           </span>
         </v-layout>
 
@@ -53,7 +52,7 @@
           <v-tooltip bottom>
             <v-switch
               slot="activator"
-              v-model="switch1"
+              v-model="isPrivateSnippetsx"
               :label="isPrivateMsgsOn()"
               color="primary"
             />
@@ -65,6 +64,7 @@
         <v-divider vertical/>
 
         <v-btn
+          @click="logout()"
           text
           class="elevation-0 text-none">
           <v-layout
@@ -91,18 +91,31 @@
 </template>
 
 <script>
+  import {mapState, mapGetter, mapActions, mapMutations} from 'vuex'
+
   export default {
     name: "MainHeader",
-    data() {
-      return {
-        switch1: true,
-        loggedUser: false, // todo check user from store
+    computed: {
+      ...mapState({
+        user: state => state.userData.user,
+        isPrivateSnippets: state => state.userData.user.privateSnippets
+      }),
+      isPrivateSnippetsx: {
+        get() {
+          return this.isPrivateSnippets
+        },
+        set(value) {
+          this.$store.dispatch('togglePrivacy', this.user.userId)
+        }
       }
     },
     methods: {
       isPrivateMsgsOn() {
-        const isPrivateMsg = this.switch1 ? 'On' : 'Off';
+        const isPrivateMsg = this.isPrivateSnippets ? 'On' : 'Off';
         return 'Private snippets: ' + isPrivateMsg
+      },
+      logout() {
+        this.$store.dispatch('logout')
       }
     }
   }

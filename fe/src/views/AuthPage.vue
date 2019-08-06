@@ -13,6 +13,7 @@
             label="code"
             type="password"
             v-model="secureCode"
+            @keyup.enter.native="validateCode()"
           />
         </v-card-text>
 
@@ -41,6 +42,7 @@
             hint="You can use pre-exisiting name if you like"
             v-model="userName"
             ref="name"
+            @keyup.enter.native="validateUserName()"
           />
         </v-card-text>
 
@@ -67,6 +69,9 @@
 </template>
 
 <script>
+  import userService from "../services/userService";
+  import { mapState, mapGetter, mapActions } from 'vuex'
+
   export default {
     name: "AuthPage",
     data() {
@@ -79,24 +84,28 @@
         invalidUserName: false
       }
     },
-    computed: {},
+    computed: {
+      ...mapState(['user']),
+    },
     methods: {
+      ...mapActions(['getUser']),
       validateCode() {
-        // todo api-call
+        userService.validateSecureCode({secureCode: this.secureCode})
+          .then(res => {
+            console.log('CODE: ', res)
+            localStorage.setItem('token', res.data)
 
-        // mock
-        if (this.secureCode === 'moi') {
-          // show username input
-          this.showSecureCodeInput = false
-          this.$nextTick(() => this.$refs.name.$el.focus())
+            this.showSecureCodeInput = false
+            this.$nextTick(() => this.$refs.name.$el.focus())
 
-
-        } else {
-          this.attemptsRemaining = this.countFailedAttempts()
-          if (this.attemptsRemaining < 0) {
-            this.isLoginAllowed = false
-          }
-        }
+          })
+          .catch(err => {
+            console.log('err: ', err)
+            this.attemptsRemaining = this.countFailedAttempts()
+            if (this.attemptsRemaining < 0) {
+              this.isLoginAllowed = false
+            }
+          })
       },
       countFailedAttempts() {
         let failedAttempts = localStorage.getItem('attemptsLeft')
@@ -121,8 +130,7 @@
       },
       validateUserName() {
         if (this.userName.length >= 3 && this.userName.length <= 10) {
-          // todo api-call: initUser
-          this.$router.push('/')
+          this.getUser(this.userName)
         } else {
           this.invalidUserName = true
         }

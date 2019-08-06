@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.DeleteMapping
 
+@CrossOrigin(origins = arrayOf("http://localhost:8080"))
 @RestController
 @RequestMapping("/api")
 class SnippetController(private val titleRepository: TitleRepository,
