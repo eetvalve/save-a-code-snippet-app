@@ -12,6 +12,7 @@
 </template>
 
 <script>
+
   import AddSnippetInputSection from "./AddSnippetInputSection";
   import AddSnippetPreview from "./AddSnippetPreview";
 

@@ -33,18 +33,44 @@ class SnippetController(private val titleRepository: TitleRepository,
         return titleOwnersRepository.findAllMatchingTitles(userId, name)
     }
 
+    @GetMapping("/titles/{userId}")
+    fun getAllTitles(@PathVariable(value = "userId") userId: Int): List<TitleOwners.TitlesOnly>? =
+            titleOwnersRepository.getAllDistinctByOwner_UserIdOrOwner_UserIdOrderByTitle_TitleAsc(userId, PUBLIC_TITLES)
+
+    @GetMapping("/latestSnippets/{userId}")
+    fun getLatestSnippets(@PathVariable(value = "userId") userId: Int): List<Snippet>? {
+
+        var titleFilter: Title? = null
+
+        // find latest added snippet by user
+        val latestSnippet: Snippet? = snippetRepository.findTopByOwner_UserIdOrderBySnippetIdDesc(userId)
+
+        if (latestSnippet == null) {
+            // if not found, use alphabetically first result
+            val titleList: List<TitleOwners.TitlesOnly>? = getAllTitles(userId)
+            if (titleList != null) {
+                titleFilter = titleList.get(0).title
+                println("titleFilter: $titleFilter")
+            }
+
+        } else {
+            println("latestSnippet: $latestSnippet")
+            titleFilter = latestSnippet.title
+        }
+
+        if (titleFilter != null) {
+            return getSnippets(userId, titleFilter.titleId)
+        }
+        return null
+    }
+
+
     // get title specific snippets
     @GetMapping("/snippets/{userId}/{titleId}")
     fun getSnippets(
             @PathVariable(value = "userId") userId: Int,
             @PathVariable(value = "titleId") titleId: Int): List<Snippet> =
             snippetRepository.findAllTitleSpecificSnippets(userId, titleId)
-
-
-    @GetMapping("/titles/{userId}")
-    fun getAllTitles(@PathVariable(value = "userId") userId: Int): List<TitleOwners.TitlesOnly>? =
-            titleOwnersRepository.getAllByOwner_UserIdOrOwner_UserId(userId, PUBLIC_TITLES)
-
 
     @PostMapping("/snippet")
     fun addSnippet(@Valid @RequestBody snippet: Snippet): Snippet {

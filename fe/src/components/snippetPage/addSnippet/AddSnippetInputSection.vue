@@ -1,6 +1,6 @@
 <template>
-  <v-layout 
-    column 
+  <v-layout
+    column
     wrap>
     <v-card class="elevation-2">
 
@@ -10,8 +10,8 @@
 
         <v-spacer/>
 
-        <v-btn 
-          icon 
+        <v-btn
+          icon
           @click="cardOpen = !cardOpen">
           <v-icon
             :class="{rotate: cardOpen}"
@@ -23,26 +23,26 @@
         </v-btn>
       </v-card-title>
 
-      <v-card-text 
-        v-if="cardOpen" 
+      <v-card-text
+        v-if="cardOpen"
         class="pb-0 pt-1">
 
         <v-layout column>
-          <v-text-field 
+          <v-text-field
             class="text-field-height"
             label="Language/Program name"
 
           />
 
 
-          <v-text-field 
+          <v-text-field
             v-model="item.description"
             class="text-field-height"
             label="Add Description"
           />
 
 
-          <v-textarea 
+          <v-textarea
             v-model="item.snippet"
             class="textarea-field-height"
             name="input-7-1"
@@ -56,6 +56,7 @@
         <v-card-actions class="pt-0">
           <v-flex class="text-xs-right">
             <v-btn
+              color="primary"
               class="info right"
               @click="addNewSnippet()">
               add
@@ -65,15 +66,32 @@
       </v-card-text>
     </v-card>
 
-    <snack-bar :snackbar="snackbar" />
+    <snack-bar :snackbar="snackbar"/>
   </v-layout>
 </template>
 
 <script>
+  import {mapState, mapGetter, mapActions, mapMutations} from 'vuex'
   import SnackBar from "../../utils/SnackBar";
+
   export default {
     name: "AddSnippetInputSection",
     components: {SnackBar},
+    computed: {
+      ...mapState({
+        user: state => state.userData.user
+      }),
+      inputTextLength() {
+        return this.item.description.length > 0 || this.item.snippet.length > 0 ? this.$emit('addNewHasValues', true, this.item) : this.$emit('addNewHasValues', false, null)
+      },
+      cardOpened() {
+        return this.$emit('cardOpened', this.cardOpen)
+      }
+    },
+    beforeMount() {
+      this.item.owner.userName = this.user.userName
+      this.item.privateSnippet = this.user.privateSnippet
+    },
     data() {
       return {
         cardOpen: false,
@@ -82,23 +100,20 @@
           visible: false
         },
         item: {
-          id: 'xx',
+          owner: {
+            userName: ''
+          },
+          privateSnippet: false,
           description: '',
           snippet: 'dd'
         }
       }
     },
-    computed: {
-      inputTextLength() {
-        return this.item.description.length > 0 || this.item.snippet.length > 0 ? this.$emit('addNewHasValues', true, this.item) : this.$emit('addNewHasValues', false, null)
-      },
-      cardOpened() {
-        return this.$emit('cardOpened', this.cardOpen)
-      }
-    },
     watch: {
-      inputTextLength(newVal) {},
-      cardOpened(newVal) {},
+      inputTextLength(newVal) {
+      },
+      cardOpened(newVal) {
+      },
     },
     methods: {
       addNewSnippet() {

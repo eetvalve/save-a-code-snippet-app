@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional
 
 @Repository
 interface TitleOwnersRepository : JpaRepository<TitleOwners, Int> {
-    fun getAllByOwner_UserIdOrOwner_UserId(owner: Int, publicTitles: Int): List<TitleOwners.TitlesOnly>?
+    fun getAllDistinctByOwner_UserIdOrOwner_UserIdOrderByTitle_TitleAsc(owner: Int, publicTitles: Int): List<TitleOwners.TitlesOnly>?
 
     @Query(value = "SELECT * FROM title_owners t WHERE t.owner = :owner AND t.title_id = :title ", nativeQuery = true)
     fun checkIfOwnershipExist(@Param("owner") owner: Int, @Param("title") title: Int): TitleOwners?
