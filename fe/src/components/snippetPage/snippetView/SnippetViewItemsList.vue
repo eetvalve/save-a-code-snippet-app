@@ -12,7 +12,8 @@
       <template v-for="(item, index) in snippets">
 
         <snippet-view-item 
-          :item="item" 
+          :item="item"
+          :index="index"
           :is-preview="false"/>
 
       </template>

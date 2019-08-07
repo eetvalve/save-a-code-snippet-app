@@ -29,7 +29,7 @@
                 small
                 color="primary">account_box
               </v-icon>
-              <span v-if="item">Creator: {{ item.owner.userName }}
+              <span v-if="!isPreview">Creator: {{ item.owner.userName }}
                 <br>
                 is private: {{ item.privateSnippet }}
               </span>
@@ -73,7 +73,7 @@
     <v-card-text class="pt-0">
 
       <div
-        :id="'snippet-position-' + item.snippetId"
+        :id="'snippet-position-' + index"
         class="snippet-content-container pa-2">
         <!-- {{item.snippet}} -->
       </div>
@@ -93,6 +93,9 @@
       },
       isPreview: {
         type: Boolean
+      },
+      index: {
+        type: Number
       }
     },
     data() {
@@ -118,7 +121,7 @@
     },
     methods: {
       stringToHtml(item) {
-        const injectPosition = document.getElementById("snippet-position-" + item.snippetId)
+        const injectPosition = document.getElementById("snippet-position-" + this.index)
         injectPosition.innerHTML = item.snippet;
       }
     },

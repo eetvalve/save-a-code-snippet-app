@@ -6,9 +6,15 @@ export default {
     return Api().get('/titles/' + store.state.userData.user.userId)
   },
   getTitleNamesList(params) {
-    return Api().get('/titleNamesList/' + params.userId + '/' + params.name)
+    return Api().get('/titleNamesList/' + store.state.userData.user.userId + '/' + params.name)
   },
   getLatestSnippets() {
     return Api().get('/latestSnippets/' + store.state.userData.user.userId)
+  },
+  getSnippets(params) {
+    return Api().get('/snippets/' + store.state.userData.user.userId + '/' + params.titleId)
+  },
+  addSnippet(snippet) {
+    return Api().post('/snippet', snippet)
   }
 }

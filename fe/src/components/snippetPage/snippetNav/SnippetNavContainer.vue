@@ -9,13 +9,14 @@
       row
       nowrap
       class="nav-container-list">
-      <v-card>
+      <v-card class="fixed-desktop-nav">
         <snippet-nav-search-bar
           ref="searchBarComponent"
           @filterTitles="filterTitles"
         />
         <snippet-nav-items-list
-          @clicked="onClickChild"
+          @clicked="getSnippets"
+          @getLatest="getLatestSnippets"
           :titles="titles"
           :loading="loading"/>
       </v-card>
@@ -63,17 +64,19 @@
         this.$store.dispatch('getTitles')
       },
       filterTitles(value) {
-        console.log('title query', value)
         this.$store.dispatch('filterTitles', value)
       },
-      onClickChild(value) {
+      getSnippets(value) {
         console.log(value) // someValue
 
         // close nav
         this.openMobileNav = false
-        this.$store.commit('SET_SELECTED_TITLE', value.title)
-        this.$store.commit('RETURN_ORIGINAL_TITLES_STATE')
+        this.$store.dispatch('getSnippets', value.title)
         this.$refs.searchBarComponent.text = ''
+      },
+      getLatestSnippets() {
+        this.openMobileNav = false
+        this.$store.dispatch('getLatestSnippetsAdded')
       }
     }
   }
@@ -85,10 +88,23 @@
     max-height: 1000px;
     /*  overflow-y: scroll; */
     margin-right: 10px;
+    position: relative;
   }
 
   .mobile-nav-open {
     display: none !important;
+  }
+
+  .nav-container-list {
+
+  }
+
+  @media screen and (min-width: 767px) {
+    .nav-container-list {
+      position: fixed;
+      z-index: 10000;
+      max-width: 190px;
+    }
   }
 
   @media screen and (max-width: 767px) {
@@ -96,8 +112,8 @@
     .nav-container-list {
       position: fixed;
       z-index: 10000;
-      height: 100%;
       top: 55px;
+      max-height: 100vh;
     }
 
     .nav-container-list-closed {
@@ -109,11 +125,12 @@
     }
 
     .mobile-nav-open {
+      position: fixed;
       display: flex !important;
       align-items: center !important;
       justify-content: center;
       width: 25px;
-
+      height: 100vh;
     }
 
     .nav-container {
@@ -121,7 +138,7 @@
     }
 
     .rotate {
-      transform: rotate(180deg);
+      transform: rotate(180deg) !important;
     }
 
   }

@@ -75,6 +75,7 @@ class SnippetController(private val titleRepository: TitleRepository,
     @PostMapping("/snippet")
     fun addSnippet(@Valid @RequestBody snippet: Snippet): Snippet {
 
+        println("snippetData: ${snippet.isPrivateSnippet}")
         val titleRes: Title = snippetService.createTitleIfNotExist(snippet.title)
         snippetService.createTitleOwnershipIfNotExist(titleRes, snippet)
 
