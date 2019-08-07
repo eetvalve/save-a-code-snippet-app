@@ -10,6 +10,9 @@ import org.springframework.stereotype.Component
 import org.springframework.web.servlet.HandlerInterceptor
 import org.springframework.web.servlet.ModelAndView
 import java.lang.Exception
+import java.util.Enumeration
+
+
 
 @Component
 class ApiInterceptor(private val cryptoUtil: CryptoUtil): HandlerInterceptor {
@@ -19,8 +22,10 @@ class ApiInterceptor(private val cryptoUtil: CryptoUtil): HandlerInterceptor {
 
     override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
 
+        println("METHOD: ${request.method}")
+
         println("Pre Handle method is Calling")
-        if (request.requestURI.startsWith("/api/validateSecureCode")) {
+        if (request.requestURI.startsWith("/api/validateSecureCode") || request.method.equals("OPTIONS")) {
             return true
         }
 

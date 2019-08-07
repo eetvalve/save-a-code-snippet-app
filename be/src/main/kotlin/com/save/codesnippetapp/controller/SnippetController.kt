@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.DeleteMapping
 
+@CrossOrigin(origins = arrayOf("http://localhost:8080"))
 @RestController
 @RequestMapping("/api")
 class SnippetController(private val titleRepository: TitleRepository,
@@ -32,6 +33,38 @@ class SnippetController(private val titleRepository: TitleRepository,
         return titleOwnersRepository.findAllMatchingTitles(userId, name)
     }
 
+    @GetMapping("/titles/{userId}")
+    fun getAllTitles(@PathVariable(value = "userId") userId: Int): List<TitleOwners.TitlesOnly>? =
+            titleOwnersRepository.getAllDistinctByOwner_UserIdOrOwner_UserIdOrderByTitle_TitleAsc(userId, PUBLIC_TITLES)
+
+    @GetMapping("/latestSnippets/{userId}")
+    fun getLatestSnippets(@PathVariable(value = "userId") userId: Int): List<Snippet>? {
+
+        var titleFilter: Title? = null
+
+        // find latest added snippet by user
+        val latestSnippet: Snippet? = snippetRepository.findTopByOwner_UserIdOrderBySnippetIdDesc(userId)
+
+        if (latestSnippet == null) {
+            // if not found, use alphabetically first result
+            val titleList: List<TitleOwners.TitlesOnly>? = getAllTitles(userId)
+            if (titleList != null) {
+                titleFilter = titleList.get(0).title
+                println("titleFilter: $titleFilter")
+            }
+
+        } else {
+            println("latestSnippet: $latestSnippet")
+            titleFilter = latestSnippet.title
+        }
+
+        if (titleFilter != null) {
+            return getSnippets(userId, titleFilter.titleId)
+        }
+        return null
+    }
+
+
     // get title specific snippets
     @GetMapping("/snippets/{userId}/{titleId}")
     fun getSnippets(
@@ -39,15 +72,10 @@ class SnippetController(private val titleRepository: TitleRepository,
             @PathVariable(value = "titleId") titleId: Int): List<Snippet> =
             snippetRepository.findAllTitleSpecificSnippets(userId, titleId)
 
-
-    @GetMapping("/titles/{userId}")
-    fun getAllTitles(@PathVariable(value = "userId") userId: Int): List<TitleOwners.TitlesOnly>? =
-            titleOwnersRepository.getAllByOwner_UserIdOrOwner_UserId(userId, PUBLIC_TITLES)
-
-
     @PostMapping("/snippet")
     fun addSnippet(@Valid @RequestBody snippet: Snippet): Snippet {
 
+        println("snippetData: ${snippet.isPrivateSnippet}")
         val titleRes: Title = snippetService.createTitleIfNotExist(snippet.title)
         snippetService.createTitleOwnershipIfNotExist(titleRes, snippet)
 

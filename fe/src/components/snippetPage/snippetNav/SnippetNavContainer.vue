@@ -1,25 +1,32 @@
 <template>
-  <v-layout 
-    row 
-    nowrap 
+  <v-layout
+    row
+    nowrap
     class="nav-container">
 
-    <v-layout 
-      :class="openMobileNav ? 'nav-container-list-open' : 'nav-container-list-closed'" 
-      row 
+    <v-layout
+      :class="openMobileNav ? 'nav-container-list-open' : 'nav-container-list-closed'"
+      row
       nowrap
       class="nav-container-list">
-      <v-card>
-        <snippet-nav-search-bar/> <!--emit seach here -->
-        <snippet-nav-items-list @clicked="onClickChild"/> <!--input list updates from here to items list -->
+      <v-card class="fixed-desktop-nav">
+        <snippet-nav-search-bar
+          ref="searchBarComponent"
+          @filterTitles="filterTitles"
+        />
+        <snippet-nav-items-list
+          @clicked="getSnippets"
+          @getLatest="getLatestSnippets"
+          :titles="titles"
+          :loading="loading"/>
       </v-card>
 
-      <v-card 
-        depressed 
+      <v-card
+        depressed
         class="mobile-nav-open elevation-1">
         <v-card-actions>
-          <v-btn 
-            icon 
+          <v-btn
+            icon
             @click="openMobileNav = !openMobileNav">
             <v-icon :class="{rotate : openMobileNav}">arrow_forward_ios</v-icon>
           </v-btn>
@@ -31,24 +38,45 @@
 </template>
 
 <script>
+  import {mapState, mapGetter, mapActions, mapMutations} from 'vuex'
   import SnippetNavSearchBar from "./SnippetNavSearchBar";
   import SnippetNavItemsList from "./SnippetNavItemsList";
 
   export default {
     name: "SnippetNavContainer",
     components: {SnippetNavItemsList, SnippetNavSearchBar},
+    created() {
+      this.getTitles()
+    },
+    computed: {
+      ...mapState({
+        titles: state => state.snippetData.titles,
+        loading: state => state.snippetData.isTitlesLoading
+      }),
+    },
     data() {
       return {
-        openMobileNav: false
+        openMobileNav: false,
       }
     },
     methods: {
-      onClickChild(value) {
+      getTitles() {
+        this.$store.dispatch('getTitles')
+      },
+      filterTitles(value) {
+        this.$store.dispatch('filterTitles', value)
+      },
+      getSnippets(value) {
         console.log(value) // someValue
 
         // close nav
         this.openMobileNav = false
-
+        this.$store.dispatch('getSnippets', value.title)
+        this.$refs.searchBarComponent.text = ''
+      },
+      getLatestSnippets() {
+        this.openMobileNav = false
+        this.$store.dispatch('getLatestSnippetsAdded')
       }
     }
   }
@@ -60,10 +88,23 @@
     max-height: 1000px;
     /*  overflow-y: scroll; */
     margin-right: 10px;
+    position: relative;
   }
 
   .mobile-nav-open {
     display: none !important;
+  }
+
+  .nav-container-list {
+
+  }
+
+  @media screen and (min-width: 767px) {
+    .nav-container-list {
+      position: fixed;
+      z-index: 10000;
+      max-width: 190px;
+    }
   }
 
   @media screen and (max-width: 767px) {
@@ -71,12 +112,12 @@
     .nav-container-list {
       position: fixed;
       z-index: 10000;
-      height: 100%;
       top: 55px;
+      max-height: 100vh;
     }
 
     .nav-container-list-closed {
-      left: -210px;
+      left: -226px;
     }
 
     .nav-container-list-open {
@@ -84,11 +125,12 @@
     }
 
     .mobile-nav-open {
+      position: fixed;
       display: flex !important;
       align-items: center !important;
       justify-content: center;
       width: 25px;
-
+      height: 100vh;
     }
 
     .nav-container {
@@ -96,7 +138,7 @@
     }
 
     .rotate {
-      transform: rotate(180deg);
+      transform: rotate(180deg) !important;
     }
 
   }

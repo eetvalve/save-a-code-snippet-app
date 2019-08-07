@@ -22,4 +22,6 @@ interface SnippetRepository : JpaRepository<Snippet, Int> {
     fun findAllTitleUsages(@Param("titleId") titleId: Int,
                            @Param("owner") owner: Int,
                            @Param("isPrivateSnippet") isPrivateSnippet: Boolean): Int
+
+    fun findTopByOwner_UserIdOrderBySnippetIdDesc(userId: Int?): Snippet?
 }

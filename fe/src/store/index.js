@@ -1,14 +1,14 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
-import timelineDataModule from './modules/timelineData';
-import personalDataModule from './modules/personalData';
+import userDataModule from './modules/userData';
+import snippetDataModule from './modules/snippetData'
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   modules: {
-    timelineData: timelineDataModule,
-    personalData: personalDataModule,
+    userData: userDataModule,
+    snippetData: snippetDataModule,
   },
 });

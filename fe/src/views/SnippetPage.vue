@@ -21,7 +21,18 @@
 
   export default {
     name: "SnippetPage",
-    components: {MainHeader, SnippetViewContainer, AddSnippetContainer, SnippetNavContainer}
+    components: {MainHeader, SnippetViewContainer, AddSnippetContainer, SnippetNavContainer},
+    created() {
+      this.isAuthenticated()
+    },
+    methods: {
+      isAuthenticated() {
+        console.log('inited')
+        if (localStorage.getItem('token') === null || localStorage.getItem('user') === null) {
+          this.$router.push('/auth')
+        }
+      }
+    }
   }
 </script>
 

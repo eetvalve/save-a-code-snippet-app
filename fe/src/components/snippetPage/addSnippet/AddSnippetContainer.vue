@@ -5,13 +5,14 @@
       @cardOpened="isCardOpen"
     />
     <div v-if="cardOpen && showPreview">
-      <add-snippet-preview :item="item"/> <!-- -->
+      <add-snippet-preview :item="item"/>
     </div>
   </section>
 
 </template>
 
 <script>
+
   import AddSnippetInputSection from "./AddSnippetInputSection";
   import AddSnippetPreview from "./AddSnippetPreview";
 
@@ -31,7 +32,6 @@
         this.item = itemObject;
       },
       isCardOpen(flag) {
-        console.log('cardOpen: ', flag)
         this.cardOpen = flag
       }
     }
@@ -41,5 +41,6 @@
 <style scoped>
   .add-snippet-container {
 
+    
   }
 </style>

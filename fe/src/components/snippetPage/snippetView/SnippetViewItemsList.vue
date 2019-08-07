@@ -9,10 +9,11 @@
 
   <v-layout>
     <v-list class="list-width custom-color">
-      <template v-for="(item, index) in items">
+      <template v-for="(item, index) in snippets">
 
         <snippet-view-item 
-          :item="item" 
+          :item="item"
+          :index="index"
           :is-preview="false"/>
 
       </template>
@@ -27,28 +28,14 @@
   export default {
     name: "SnippetViewItemsList",
     components: {SnippetViewItem},
+    props: {
+      snippets: {
+        type: Array,
+        default: () => []
+      }
+    },
     data() {
       return {
-        items: [
-          {
-            id: 0,
-            description: "taa on hyva",
-            snippet: "u + v",
-            owner: "edu"
-          },
-          {
-            id: 1,
-            description: "taa on hyva 2",
-            snippet: "u + v",
-            owner: "edu"
-          },
-          {
-            id: 2,
-            description: "taa on hyva 3",
-            snippet: "u + v",
-            owner: "edu"
-          },
-        ]
       }
     }
   }
