@@ -2,6 +2,7 @@ import Api from '@/services/api'
 
 export default {
   validateSecureCode(params) {
+    console.log('secureCode')
     return Api().post('/validateSecureCode/' + params.secureCode)
   },
   initUser(params) {

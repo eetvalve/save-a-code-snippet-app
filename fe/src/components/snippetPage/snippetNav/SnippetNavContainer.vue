@@ -28,7 +28,7 @@
           <v-btn
             icon
             @click="openMobileNav = !openMobileNav">
-            <v-icon :class="{rotate : openMobileNav}">arrow_forward_ios</v-icon>
+            <v-icon :class="{rotateArrow : openMobileNav}">arrow_forward_ios</v-icon>
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -137,7 +137,7 @@
       width: 6%;
     }
 
-    .rotate {
+    .rotateArrow {
       transform: rotate(180deg) !important;
     }
 

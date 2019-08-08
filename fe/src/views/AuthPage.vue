@@ -92,7 +92,6 @@
       validateCode() {
         userService.validateSecureCode({secureCode: this.secureCode})
           .then(res => {
-            console.log('CODE: ', res)
             localStorage.setItem('token', res.data)
 
             this.showSecureCodeInput = false

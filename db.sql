@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS users (
 
 CREATE TABLE IF NOT EXISTS titles (
     title_id int AUTO_INCREMENT,
-    title varchar(255) NOT NULL,
+    title varchar(100) NOT NULL,
     PRIMARY KEY (title_id)
 );
 
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS title_owners (
 CREATE TABLE IF NOT EXISTS snippets (
     snippet_id int AUTO_INCREMENT,
     description varchar(255) NOT NULL,
-    snippet varchar(255) NOT NULL,
+    snippet MEDIUMTEXT NOT NULL,
     is_private_snippet boolean,
     title_id int NOT NULL,
     owner int NOT NULL,
