@@ -29,7 +29,7 @@
                 small
                 color="primary">account_box
               </v-icon>
-              <span v-if="!isPreview">Creator: {{ item.owner.userName }}
+              <span v-if="!isPreview">Owner: {{ item.owner.userName }}
                 <br>
                 is private: {{ item.privateSnippet }}
               </span>

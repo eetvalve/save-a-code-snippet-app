@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Home from '../views/Dashboard.vue';
 import AuthPage from '../views/AuthPage.vue';
 import SnippetPage from '../views/SnippetPage.vue';
 
