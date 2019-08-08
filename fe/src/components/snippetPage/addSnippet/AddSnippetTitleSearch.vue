@@ -41,6 +41,20 @@
     props: {
       titleList: {
         type: Array
+      },
+      existingTitle: {
+        type: String
+      }
+    },
+    watch: {
+      existingTitle: {
+        immediate: true,
+        handler(val) {
+          console.log('existingTitle: ', val)
+          if (val) {
+            this.titleName = val
+          }
+        }
       }
     },
     data() {
@@ -72,8 +86,7 @@
       putFocus() {
         this.listFocus = true
       }
-    },
-    watch: {}
+    }
   }
 </script>
 

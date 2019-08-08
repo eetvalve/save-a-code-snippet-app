@@ -6,7 +6,7 @@
   >
     {{ snackbar.text }}
     <v-btn
-      color="primary"
+      :color="snackbar.color"
       text
       @click="snackbar.visible = false"
     >
@@ -26,7 +26,7 @@
     },
     data() {
       return {
-
+        color: 'red'
       }
     },
   }

@@ -1,6 +1,7 @@
 import snippetService from '@/services/snippetService'
 import userDataState from '@/store/modules/userData'
 import router from '@/router/router'
+import Vue from "vue";
 
 const snippetDataState = {
   state: {
@@ -11,6 +12,16 @@ const snippetDataState = {
     selectedTitle: '', // currently visible snippets title
     snippets: [],
     isSnippetsLoading: false,
+    addNewComponentHeight: 0,
+    snackbar: {},
+    snippetTemplate: {
+      snippetId: null,
+      titleName: '',
+      privateSnippet: false,
+      description: '',
+      snippet: ''
+    },
+    editModeOn: false
   },
   getters: {},
   mutations: {
@@ -47,21 +58,58 @@ const snippetDataState = {
       if (!matchingTitle) {
         state.titles.push(responseTitle)
       }
-
     },
     UPDATE_SNIPPETS_LOCALLY(state, responseSnippet) {
       // replace if same index
       const index = state.snippets.findIndex(item => item.snippetId === responseSnippet.snippetId)
-      if (index > 0) {
-        // if old snippet gets edited
-        state.snippets[index] = responseSnippet
-      } else {
-        // totally new snippet
+
+      console.log('index: ', index)
+
+      // not found
+      if (index === -1) {
         state.snippets.push(responseSnippet)
+      } else {
+        // if old snippet gets edited
+        Vue.set(state.snippets, index, responseSnippet)
+      }
+    },
+    DELETE_SNIPPET_LOCALLY(state, snippetId) {
+      state.snippets = state.snippets.filter(snippet => snippet.snippetId !== snippetId)
+    },
+    UPDATE_SNIPPET_TEMPLATE(state, snippet) {
+      console.log('snippet: ', snippet)
+      state.snippetTemplate = {
+        snippetId: snippet.snippetId,
+        titleName: snippet.title.title,
+        privateSnippet: false,
+        description: snippet.description,
+        snippet: snippet.snippet
+      }
+      state.editModeOn = true
+    },
+    EDIT_MODE_OFF(state) {
+      state.editModeOn = false
+    },
+    CLEAR_SNIPPET_TEMPLATE(state) {
+      state.snippetTemplate = {
+        snippetId: null,
+        titleName: '',
+        privateSnippet: false,
+        description: '',
+        snippet: ''
       }
 
+      state.editModeOn = false
+    },
+    GET_ADD_SNIPPET_CONTAINER_HEIGHT(state, height) {
+      if (height > 0) {
+        console.log('height: ', height)
+        state.addNewComponentHeight = height
+      }
+    },
+    UPDATE_SNACKBAR_MSG(state, msgObj) {
+      state.snackbar = msgObj
     }
-
   },
   actions: {
     getTitles(context) {
@@ -134,31 +182,95 @@ const snippetDataState = {
     addNewSnippet(context, item) {
 
       // create snippet
-      const snippet = {
+      context.dispatch('createSnippetObject', item)
+        .then(snippet => {
+          console.log('FINAL snippet: ', snippet)
+
+          snippetService.addSnippet(snippet)
+            .then(snippetRes => {
+              context.dispatch('updateTitlesAndSnippets', snippetRes.data)
+              context.commit('CLEAR_SNIPPET_TEMPLATE')
+
+              context.commit('UPDATE_SNACKBAR_MSG', {
+                text: 'Snippet added successfully!',
+                visible: true,
+                color: 'primary'
+              })
+            })
+            .catch(err => {
+              console.log('err', err)
+              context.commit('UPDATE_SNACKBAR_MSG', {
+                text: 'Snippet add failed',
+                visible: true,
+                color: 'red'
+              })
+            })
+        })
+
+    },
+    editSnippet(context, item) {
+      context.dispatch('createSnippetObject', item)
+        .then(snippet => {
+          console.log('FINAL edited snippet: ', snippet)
+
+          snippetService.editSnippet(snippet)
+            .then(snippetRes => {
+              context.dispatch('updateTitlesAndSnippets', snippetRes.data)
+              context.commit('CLEAR_SNIPPET_TEMPLATE')
+              context.commit('EDIT_MODE_OFF')
+
+              context.commit('UPDATE_SNACKBAR_MSG', {
+                text: 'Snippet edited successfully!',
+                visible: true,
+                color: 'primary'
+              })
+            })
+            .catch(err => {
+              console.log('err', err)
+              context.commit('UPDATE_SNACKBAR_MSG', {
+                text: 'Snippet edit failed!',
+                visible: true,
+                color: 'red'
+              })
+            })
+        })
+    },
+    deleteSnippet(context, id) {
+      snippetService.deleteSnippet({snippetId: id})
+        .then(res => {
+          // todo delete snackbar flag
+          context.dispatch('getTitles')
+          context.commit('DELETE_SNIPPET_LOCALLY', id)
+
+          context.commit('UPDATE_SNACKBAR_MSG', {
+            text: 'Snippet deleted successfully!',
+            visible: true,
+            color: 'primary'
+          })
+        })
+        .catch(err => {
+          console.log('err', err)
+
+          context.commit('UPDATE_SNACKBAR_MSG', {
+            text: 'delete failed',
+            visible: true,
+            color: 'red'
+          })
+        })
+    },
+    createSnippetObject(context, item) {
+      return {
         owner: userDataState.state.user,
         title: {
           title: item.titleName,
         },
         isPrivateSnippet: userDataState.state.user.privateSnippets,
         description: item.description,
-        snippet: item.snippet
+        snippet: item.snippet,
+        snippetId: item.snippetId ? item.snippetId : null
       }
-
-      console.log('FINAL snippet: ', snippet)
-
-      snippetService.addSnippet(snippet)
-        .then(snippetRes => {
-          context.dispatch('updateTitlesAndSnippets', snippetRes.data)
-        })
-        .catch(err => {
-          console.log('err', err)
-        })
-    },
-    editSnippet(context, item) {
-
     },
     updateTitlesAndSnippets(context, snippetRes) {
-      console.log('snippetRes: ', snippetRes)
       if (snippetRes.title.title === context.state.selectedTitle) {
         // prevents unnecessary db-query
         context.commit('UPDATE_SNIPPETS_LOCALLY', snippetRes)
@@ -170,7 +282,7 @@ const snippetDataState = {
 
       // prevents unnecessary db-query
       // context.commit('UPDATE_TITLES_LOCALLY', res.data.title)
-    }
+    },
   },
 };
 

@@ -6,7 +6,9 @@
 
       <div class="snippet-page-main-content">
         <add-snippet-container/>
-        <snippet-view-container/>
+        <div id="snippetGap">
+          <snippet-view-container/>
+        </div>
       </div>
 
     </div>
@@ -14,6 +16,7 @@
 </template>
 
 <script>
+  import {mapState, mapGetter, mapActions, mapMutations} from 'vuex'
   import SnippetNavContainer from "../components/snippetPage/snippetNav/SnippetNavContainer";
   import AddSnippetContainer from "../components/snippetPage/addSnippet/AddSnippetContainer";
   import SnippetViewContainer from "../components/snippetPage/snippetView/SnippetViewContainer";
@@ -25,13 +28,40 @@
     created() {
       this.isAuthenticated()
     },
+    computed: {
+      ...mapState({
+        addNewComponentHeight: state => state.snippetData.addNewComponentHeight
+      })
+    },
+    data() {
+      return {
+        isTopOfPage: true
+      }
+    },
     methods: {
       isAuthenticated() {
         console.log('inited')
         if (localStorage.getItem('token') === null || localStorage.getItem('user') === null) {
           this.$router.push('/auth')
         }
+      },
+      handleScroll(event) {
+
+        this.isTopOfPage = window.scrollY <= 0
+        const element = document.getElementById('snippetGap')
+
+        if (!this.isTopOfPage) {
+          element.style.marginTop = this.addNewComponentHeight + "px";
+        } else {
+          element.style.marginTop = "0px"
+        }
       }
+    },
+    created() {
+      window.addEventListener('scroll', this.handleScroll);
+    },
+    destroyed() {
+      window.removeEventListener('scroll', this.handleScroll);
     }
   }
 </script>
@@ -61,6 +91,10 @@
     flex-direction: column;
     flex-wrap: nowrap;
     width: 80%;
+  }
+
+  .snippetGap {
+    margin-top: 95px;
   }
 
   @media screen and (max-width: 767px) {

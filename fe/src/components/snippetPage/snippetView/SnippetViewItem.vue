@@ -37,6 +37,7 @@
           </v-btn>
 
           <v-btn
+            @click="editSnippet()"
             :disabled="isPreview"
             small
             text
@@ -52,6 +53,7 @@
           </v-btn>
 
           <v-btn
+            @click="deleteSnippet()"
             :disabled="isPreview"
             small
             text
@@ -80,13 +82,24 @@
 
 
     </v-card-text>
+
+    <snack-bar :snackbar="snackbar" />
   </v-card>
 
 </template>
 
 <script>
+  import {mapState, mapGetter, mapActions, mapMutations} from 'vuex'
+  import SnackBar from "../../utils/SnackBar";
+
   export default {
     name: "SnippetViewItem",
+    components: {SnackBar},
+    computed: {
+      ...mapState({
+        snackbar: state => state.snippetData.snackbar
+      })
+    },
     props: {
       item: {
         type: Object,
@@ -123,6 +136,12 @@
       stringToHtml(item) {
         const injectPosition = document.getElementById("snippet-position-" + this.index)
         injectPosition.innerHTML = item.snippet;
+      },
+      deleteSnippet() {
+        this.$store.dispatch('deleteSnippet', this.item.snippetId)
+      },
+      editSnippet() {
+        this.$store.commit('UPDATE_SNIPPET_TEMPLATE', this.item)
       }
     },
   }

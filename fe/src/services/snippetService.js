@@ -16,5 +16,11 @@ export default {
   },
   addSnippet(snippet) {
     return Api().post('/snippet', snippet)
+  },
+  editSnippet(snippet) {
+    return Api().put('/snippet', snippet)
+  },
+  deleteSnippet(params) {
+    return Api().delete('/snippet/' + store.state.userData.user.userId + '/' + params.snippetId)
   }
 }

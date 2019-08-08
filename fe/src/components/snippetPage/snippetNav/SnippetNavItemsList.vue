@@ -91,6 +91,7 @@
 
   @media screen and (max-width: 767px) {
     .list-overflow {
+      max-width: 226px;
       height: 80vh !important;
       overflow-y: auto !important;
     }

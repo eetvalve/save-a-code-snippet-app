@@ -4,11 +4,15 @@
     wrap>
     <v-card class="elevation-2">
 
-
       <v-card-title
         @click="cardOpen = !cardOpen"
         class="headline font-weight-light card-pointer">
-        Add new snippet
+        <div v-if="!editModeOn">
+          Add new snippet
+        </div>
+        <div v-else>
+          Edit snippet
+        </div>
 
         <v-spacer/>
 
@@ -34,6 +38,7 @@
             @filterTitlesList="filterTitlesList"
             @setTitleName="setTitleName"
             :title-list="titleList"
+            :existing-title="existingTitle"
           />
 
           <v-text-field
@@ -51,6 +56,7 @@
             value=""
             hint="Html elements allowed here"
             rows="1"
+            @keyup.enter.native="addNewSnippet()"
           />
         </v-layout>
 
@@ -64,10 +70,19 @@
 
           <v-flex class="text-xs-right">
             <v-btn
+              v-if="!editModeOn"
               color="primary"
               class="info right"
               @click="addNewSnippet()">
               add
+            </v-btn>
+
+            <v-btn
+              v-else
+              color="primary"
+              class="info right"
+              @click="editSnippet()">
+              edit
             </v-btn>
           </v-flex>
         </v-card-actions>
@@ -88,8 +103,11 @@
     components: {AddSnippetTitleSearch, SnackBar},
     computed: {
       ...mapState({
+        item: state => state.snippetData.snippetTemplate,
         user: state => state.userData.user,
-        titleList: state => state.snippetData.titleList
+        titleList: state => state.snippetData.titleList,
+        snackbar: state => state.snippetData.snackbar,
+        editModeOn: state => state.snippetData.editModeOn
       }),
       inputTextLength() {
         return this.item.description.length > 0 || this.item.snippet.length > 0 ? this.$emit('addNewHasValues', true, this.item) : this.$emit('addNewHasValues', false, null)
@@ -106,16 +124,7 @@
       return {
         cardOpen: false,
         isMissingData: false,
-        snackbar: {
-          text: 'Snippet added!',
-          visible: false
-        },
-        item: {
-          titleName: '',
-          privateSnippet: false,
-          description: '',
-          snippet: ''
-        }
+        existingTitle: ''
       }
     },
     watch: {
@@ -124,8 +133,23 @@
       cardOpened(newVal) {
         if (!this.cardOpen) {
           this.isMissingData = false
+
+          if (this.editModeOn) {
+            this.$store.commit('CLEAR_SNIPPET_TEMPLATE')
+          }
+
         }
       },
+      editModeOn: {
+        handler(isOpenedExternally) {
+          if (isOpenedExternally) {
+            console.log('this.item.titleName: ', this.item.titleName)
+            this.existingTitle = this.item.titleName
+          }
+
+          this.cardOpen = isOpenedExternally
+        }
+      }
     },
     methods: {
       addNewSnippet() {
@@ -134,31 +158,23 @@
         if (isValid) {
           // TODO api logic here
           this.$store.dispatch('addNewSnippet', this.item)
-            .then(res => {
-              // finally
-              this.snackbar.visible = true;
-              // this.cardOpen = false;
-              this.item.description = ''
-              this.item.snippet = ''
-              this.isMissingData = false
-            })
-            .catch(err => {
-              console.log('err: ', err)
-              this.snackbar.text = 'snippet addition failed, try again later'
-              this.snackbar.visible = true
-            })
-
-
         } else {
           this.isMissingData = true
         }
-
+      },
+      editSnippet() {
+        const isValid = this.validateInput()
+        if (isValid) {
+          // TODO api logic here
+          this.$store.dispatch('editSnippet', this.item)
+        } else {
+          this.isMissingData = true
+        }
       },
       validateInput() {
         return !!(this.item.description && this.item.snippet && this.item.titleName)
       },
       filterTitlesList(name) {
-
         if (name) {
           this.item.titleName = name
           this.$store.dispatch('filterTitlesList', name)
