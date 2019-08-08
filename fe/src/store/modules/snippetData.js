@@ -91,13 +91,10 @@ const snippetDataState = {
       state.editModeOn = false
     },
     CLEAR_SNIPPET_TEMPLATE(state) {
-      state.snippetTemplate = {
-        snippetId: null,
-        titleName: '',
-        privateSnippet: false,
-        description: '',
-        snippet: ''
-      }
+
+      state.snippetTemplate.snippetId = null
+      state.snippetTemplate.description = ''
+      state.snippetTemplate.snippet = ''
 
       state.editModeOn = false
     },

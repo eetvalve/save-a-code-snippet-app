@@ -7,6 +7,9 @@ import com.save.codesnippetapp.model.User
 import com.save.codesnippetapp.repository.SnippetRepository
 import com.save.codesnippetapp.repository.TitleOwnersRepository
 import com.save.codesnippetapp.repository.TitleRepository
+import org.jsoup.Jsoup
+import org.jsoup.safety.Whitelist
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
@@ -14,7 +17,8 @@ import org.springframework.stereotype.Service
 @Service
 class SnippetService(private val titleRepository: TitleRepository,
                      private val snippetRepository: SnippetRepository,
-                     private val titleOwnersRepository: TitleOwnersRepository) {
+                     private val titleOwnersRepository: TitleOwnersRepository,
+                     @Value("\${super.user}") val superUser: String) {
 
     fun createTitleIfNotExist(titleObj: Title): Title {
         var title: Title? = titleRepository.getFirstByTitleIgnoreCase(titleObj.title)
@@ -75,6 +79,20 @@ class SnippetService(private val titleRepository: TitleRepository,
         return true
     }
 
+    fun checkSnippetOwnership(snippet: Snippet, userId: Int): Boolean {
+
+        var isDeleteAllowed: Boolean = false
+
+        if (snippet.isPrivateSnippet) {
+            if (snippet.owner.userId == userId) {
+                isDeleteAllowed = true
+            }
+        } else {
+            isDeleteAllowed = true
+        }
+        return isDeleteAllowed
+    }
+
     fun deleteSnippet(id: Int): ResponseEntity<Int> {
         val isRemoved = snippetRepository.deleteById(id)
 
@@ -82,5 +100,14 @@ class SnippetService(private val titleRepository: TitleRepository,
             true -> ResponseEntity(HttpStatus.NOT_FOUND)
             false -> ResponseEntity(id, HttpStatus.OK)
         }
+    }
+
+    fun sanitizeUntrustedHtml(snippet: String, userName: String): String {
+
+        if (userName == superUser) {
+            return snippet
+        }
+
+        return Jsoup.clean(snippet, Whitelist.basic())
     }
 }

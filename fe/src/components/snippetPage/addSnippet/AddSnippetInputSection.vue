@@ -54,9 +54,8 @@
             name="input-7-1"
             label="Add Snippet here"
             value=""
-            hint="Html elements allowed here"
+            hint="Html elements allowed here (html will be sanitized, so don't even bother trying to XSS-attack :-) )"
             rows="1"
-            @keyup.enter.native="addNewSnippet()"
           />
         </v-layout>
 
@@ -135,6 +134,7 @@
           this.isMissingData = false
 
           if (this.editModeOn) {
+            console.log('clear template')
             this.$store.commit('CLEAR_SNIPPET_TEMPLATE')
           }
 
@@ -145,6 +145,8 @@
           if (isOpenedExternally) {
             console.log('this.item.titleName: ', this.item.titleName)
             this.existingTitle = this.item.titleName
+          } else {
+            this.existingTitle = ''
           }
 
           this.cardOpen = isOpenedExternally
@@ -158,6 +160,7 @@
         if (isValid) {
           // TODO api logic here
           this.$store.dispatch('addNewSnippet', this.item)
+          this.isMissingData = false
         } else {
           this.isMissingData = true
         }
@@ -167,6 +170,7 @@
         if (isValid) {
           // TODO api logic here
           this.$store.dispatch('editSnippet', this.item)
+          this.isMissingData = false
         } else {
           this.isMissingData = true
         }

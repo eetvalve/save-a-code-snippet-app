@@ -79,8 +79,12 @@ class SnippetController(private val titleRepository: TitleRepository,
         val titleRes: Title = snippetService.createTitleIfNotExist(snippet.title)
         snippetService.createTitleOwnershipIfNotExist(titleRes, snippet)
 
-        snippet.title.titleId = titleRes.titleId;
-        return snippetRepository.save(snippet)
+        var snippetCopy = snippet.copy()
+        println("snippetCopy: $snippetCopy")
+        snippetCopy.title.titleId = titleRes.titleId;
+        snippetCopy.snippet = snippetService.sanitizeUntrustedHtml(snippet.snippet, snippet.owner.userName)
+
+        return snippetRepository.save(snippetCopy)
     }
 
     @PutMapping("/snippet")
@@ -95,18 +99,26 @@ class SnippetController(private val titleRepository: TitleRepository,
 
 
     @DeleteMapping("/snippet/{userId}/{snippetId}")
-    fun deleteSnippet(@PathVariable userId: Int?, @PathVariable snippetId: Int?): ResponseEntity<Int> {
+    fun deleteSnippet(@PathVariable userId: Int, @PathVariable snippetId: Int): ResponseEntity<Int> {
 
-        val snippet: Snippet? = snippetRepository.getBySnippetIdAndOwner_UserId(snippetId, userId)
+        var response: ResponseEntity<Int> = ResponseEntity(HttpStatus.NOT_FOUND)
+        val snippet: Snippet? = snippetRepository.getBySnippetId(snippetId)
 
         if (snippet != null) {
 
-            val isTitleCheckDone = snippetService.checkTitleUsages(snippet)
-            if (isTitleCheckDone) {
-                return snippetService.deleteSnippet(snippet.snippetId)
+            val allowedToDelete: Boolean = snippetService.checkSnippetOwnership(snippet, userId)
+            if (allowedToDelete) {
+
+                val isTitleCheckDone = snippetService.checkTitleUsages(snippet)
+                if (isTitleCheckDone) {
+                    response = snippetService.deleteSnippet(snippet.snippetId)
+                }
+
+            } else {
+                response = ResponseEntity(HttpStatus.UNAUTHORIZED)
             }
 
         }
-        return ResponseEntity(HttpStatus.NOT_FOUND)
+        return response
     }
 }

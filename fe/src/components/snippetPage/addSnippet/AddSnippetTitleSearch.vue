@@ -50,8 +50,8 @@
       existingTitle: {
         immediate: true,
         handler(val) {
-          console.log('existingTitle: ', val)
           if (val) {
+            console.log('existingTitle: ', val)
             this.titleName = val
           }
         }

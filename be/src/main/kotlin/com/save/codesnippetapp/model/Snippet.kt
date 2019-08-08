@@ -16,7 +16,7 @@ data class Snippet(
         val description: String = "",
 
         @get: NotBlank
-        val snippet: String = "",
+        var snippet: String = "",
 
         val isPrivateSnippet: Boolean = false,
 

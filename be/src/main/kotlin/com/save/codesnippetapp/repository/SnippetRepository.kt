@@ -15,7 +15,7 @@ interface SnippetRepository : JpaRepository<Snippet, Int> {
             "OR s.is_private_snippet = FALSE AND s.title_id = :title ", nativeQuery = true)
     fun findAllTitleSpecificSnippets(@Param("owner") owner: Int, @Param("title") title: Int): List<Snippet>
 
-    fun getBySnippetIdAndOwner_UserId(snippetId: Int?, userId: Int?): Snippet?
+    fun getBySnippetId(snippetId: Int?): Snippet?
 
     @Query(value = "SELECT COUNT(*) FROM snippets s " +
             "WHERE s.title_id = :titleId AND s.owner = :owner AND s.is_private_snippet = :isPrivateSnippet", nativeQuery = true)
