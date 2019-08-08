@@ -87,6 +87,21 @@
 
   .list-overflow {
     max-width: 190px;
+    overflow-y: auto;
+    max-height: 70vh;
+  }
+
+  .list-overflow::-webkit-scrollbar-track {
+
+  }
+
+  .list-overflow::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  .list-overflow::-webkit-scrollbar-thumb {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+    background-color: $support-text;
   }
 
   @media screen and (max-width: 767px) {
