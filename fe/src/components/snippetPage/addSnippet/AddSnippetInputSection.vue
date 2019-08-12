@@ -44,8 +44,7 @@
           <v-text-field
             v-model="item.description"
             class="text-field-height"
-            label="Add Description"
-          />
+            label="Add Description"></v-text-field>
 
 
           <v-textarea

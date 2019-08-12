@@ -7,8 +7,7 @@
       v-model="titleName"
       class="text-field-height"
       label="Language/Program name"
-      hint="Use pre-existing or create new"
-    />
+      hint="Use pre-existing or create new"></v-text-field>
 
 
     <div v-if="titleList.length > 0 && (focusIn || listFocus)">
