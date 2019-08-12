@@ -1,16 +1,18 @@
 package com.save.codesnippetapp
 
+import com.google.api.client.util.store.DataStore
+import com.google.cloud.datastore.*
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.test.context.junit4.SpringRunner
 
 @RunWith(SpringRunner::class)
-@SpringBootTest
+@DataJpaTest
 class CodeSnippetAppApplicationTests {
 
-    @Test
-    fun contextLoads() {
-    }
 
+    @Test
+    fun contextLoads() {}
 }

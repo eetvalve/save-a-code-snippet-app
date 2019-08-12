@@ -17,6 +17,8 @@
     <properties>
         <java.version>1.8</java.version>
         <kotlin.version>1.2.71</kotlin.version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
 
     <dependencies>
@@ -57,6 +59,11 @@
             <optional>true</optional>
         </dependency>
         <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.197</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
@@ -69,7 +76,58 @@
             <version>1.11.3</version>
         </dependency>
 
+        <!--
+           <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-gcp-starter-data-datastore</artifactId>
+            <version>1.1.2.RELEASE</version>
+        </dependency>
+        -->
+
+       <dependency>
+            <groupId>com.google.cloud</groupId>
+            <artifactId>google-cloud-datastore</artifactId>
+            <version>1.86.0</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>com.google.cloud.sql</groupId>
+            <artifactId>mysql-socket-factory-connector-j-8</artifactId>
+            <version>1.0.14</version>
+        </dependency>
+        <!--
+               <dependency>
+                   <groupId>com.google.api-client</groupId>
+                   <artifactId>google-api-client</artifactId>
+                   <version>1.23.0</version>
+               </dependency>
+
+
+               <dependency>
+                   <groupId>org.springframework.cloud</groupId>
+                   <artifactId>spring-cloud-gcp-starters</artifactId>
+                   <version>1.1.2.RELEASE</version>
+               </dependency>
+
+               <dependency>
+                   <groupId>org.springframework.cloud</groupId>
+                   <artifactId>spring-cloud-gcp-starter-sql-mysql</artifactId>
+                   <version>1.1.2.RELEASE</version>
+               </dependency>
+                -->
     </dependencies>
+
+    <profiles>
+        <profile>
+            <id>gcp</id>
+            <dependencies>
+                <!--Spring JDBC, Cloud GCP SQL Starter -->
+
+
+            </dependencies>
+        </profile>
+    </profiles>
 
     <build>
         <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
@@ -94,10 +152,24 @@
                 <dependencies>
                     <dependency>
                         <groupId>org.jetbrains.kotlin</groupId>
+                        <artifactId>kotlin-maven-noarg</artifactId>
+                        <version>${kotlin.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.jetbrains.kotlin</groupId>
                         <artifactId>kotlin-maven-allopen</artifactId>
                         <version>${kotlin.version}</version>
                     </dependency>
                 </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>appengine-maven-plugin</artifactId>
+                <version>2.0.0</version>
+                <configuration>
+                    <deploy.projectId>create-a-code-snippet</deploy.projectId>
+                    <deploy.version>2</deploy.version>
+                </configuration>
             </plugin>
         </plugins>
     </build>
