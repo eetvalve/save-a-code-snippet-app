@@ -1,0 +1,20 @@
+steps:
+  # build frontend
+  - name: node:10.15.1
+    entrypoint: npm
+    args: ['--prefix', './fe/', 'install']
+  - name: node:10.15.1
+    entrypoint: npm
+    args: ['--prefix', './fe/', 'run', 'build-prod']
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: ['app', 'deploy', './fe/app.yaml']
+
+  # copy be app.yaml from bucket (contains env variables)
+  - name: 'gcr.io/cloud-builders/gsutil'
+    args: ['cp', 'gs://create-a-code-snippet.appspot.com/app.yaml', './be/src/main/appengine/app.yaml']
+
+  # build backend
+  - name: 'gcr.io/cloud-builders/mvn'
+    args: ['-f', 'be/pom.xml', 'clean', 'package', '-D"spring-boot.run.profiles"=gcp', 'appengine:deploy']
+
+timeout: '1600s'

@@ -14,11 +14,10 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.DeleteMapping
 
-@CrossOrigin(origins = arrayOf("http://localhost:8080"))
+@CrossOrigin(origins = arrayOf("http://localhost:8080", "https://frontend-dot-create-a-code-snippet.appspot.com"))
 @RestController
 @RequestMapping("/api")
-class SnippetController(private val titleRepository: TitleRepository,
-                        private val snippetRepository: SnippetRepository,
+class SnippetController(private val snippetRepository: SnippetRepository,
                         private val titleOwnersRepository: TitleOwnersRepository,
                         private val snippetService: SnippetService) {
 
@@ -75,12 +74,10 @@ class SnippetController(private val titleRepository: TitleRepository,
     @PostMapping("/snippet")
     fun addSnippet(@Valid @RequestBody snippet: Snippet): Snippet {
 
-        println("snippetData: ${snippet.isPrivateSnippet}")
         val titleRes: Title = snippetService.createTitleIfNotExist(snippet.title)
         snippetService.createTitleOwnershipIfNotExist(titleRes, snippet)
 
         var snippetCopy = snippet.copy()
-        println("snippetCopy: $snippetCopy")
         snippetCopy.title.titleId = titleRes.titleId;
         snippetCopy.snippet = snippetService.sanitizeUntrustedHtml(snippet.snippet, snippet.owner.userName)
 
