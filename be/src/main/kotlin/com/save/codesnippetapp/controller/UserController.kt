@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
 
-@CrossOrigin(origins = arrayOf("http://localhost:8080"))
+@CrossOrigin(origins = arrayOf("http://localhost:8080", "https://frontend-dot-create-a-code-snippet.appspot.com"))
 @RestController
 @RequestMapping("/api")
 class UserController (private val userRepository: UserRepository,

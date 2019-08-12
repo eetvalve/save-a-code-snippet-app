@@ -1,5 +1,7 @@
 <template>
-  <div class="parent-container">
+  <div
+    v-if="loadPage"
+    class="parent-container">
 
     <div class="snippet-page-container">
       <snippet-nav-container/>
@@ -27,6 +29,7 @@
     components: {MainHeader, SnippetViewContainer, AddSnippetContainer, SnippetNavContainer},
     created() {
       this.isAuthenticated()
+      window.addEventListener('scroll', this.handleScroll);
     },
     computed: {
       ...mapState({
@@ -35,7 +38,8 @@
     },
     data() {
       return {
-        isTopOfPage: true
+        isTopOfPage: true,
+        loadPage: false
       }
     },
     methods: {
@@ -43,6 +47,8 @@
         console.log('inited')
         if (localStorage.getItem('token') === null || localStorage.getItem('user') === null) {
           this.$router.push('/auth')
+        } else {
+          this.loadPage = true
         }
       },
       handleScroll(event) {
@@ -56,9 +62,6 @@
           element.style.marginTop = "0px"
         }
       }
-    },
-    created() {
-      window.addEventListener('scroll', this.handleScroll);
     },
     destroyed() {
       window.removeEventListener('scroll', this.handleScroll);
