@@ -8,6 +8,7 @@ import store from './store/index';
 //import 'bootstrap-vue/dist/bootstrap-vue.css';
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css' // Ensure you are using css-loader
+import './registerServiceWorker'
 
 Vue.use(Vuetify);
 Vue.config.productionTip = false;

@@ -6,8 +6,7 @@
     append-icon="search"
     single-line
     label="Search by topic"
-    class="pa-2"
-  />
+    class="pa-2"></v-text-field>
 </template>
 
 <script>
