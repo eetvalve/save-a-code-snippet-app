@@ -49,11 +49,9 @@ class SnippetController(private val snippetRepository: SnippetRepository,
             val titleList: List<TitleOwners.TitlesOnly>? = getAllTitles(userId)
             if (titleList != null) {
                 titleFilter = titleList.get(0).title
-                println("titleFilter: $titleFilter")
             }
 
         } else {
-            println("latestSnippet: $latestSnippet")
             titleFilter = latestSnippet.title
         }
 
