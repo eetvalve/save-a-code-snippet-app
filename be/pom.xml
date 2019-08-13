@@ -61,6 +61,7 @@
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
+            <scope>test</scope>
             <version>1.4.197</version>
         </dependency>
         <dependency>
@@ -84,7 +85,7 @@
         </dependency>
         -->
 
-       <dependency>
+        <dependency>
             <groupId>com.google.cloud</groupId>
             <artifactId>google-cloud-datastore</artifactId>
             <version>1.86.0</version>
