@@ -99,7 +99,7 @@
 
   }
 
-  @media screen and (min-width: 767px) {
+  @media screen and (min-width: 950px) {
     .nav-container-list {
       position: fixed;
       z-index: 10000;
@@ -107,7 +107,7 @@
     }
   }
 
-  @media screen and (max-width: 767px) {
+  @media screen and (max-width: 950px) {
 
     .nav-container-list {
       position: fixed;
@@ -117,7 +117,7 @@
     }
 
     .nav-container-list-closed {
-      left: -226px;
+      left: -240px;
     }
 
     .nav-container-list-open {

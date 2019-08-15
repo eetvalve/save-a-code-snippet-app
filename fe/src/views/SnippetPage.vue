@@ -100,7 +100,7 @@
     margin-top: 95px;
   }
 
-  @media screen and (max-width: 767px) {
+  @media screen and (max-width: 950px) {
     .snippet-page-main-content {
       width: 100%;
     }

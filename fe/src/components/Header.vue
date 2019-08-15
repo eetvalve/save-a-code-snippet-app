@@ -157,7 +157,7 @@
     text-align: center;
   }
 
-  @media screen and (max-width: 767px) {
+  @media screen and (max-width: 950px) {
     .header-texts {
       display: none;
     }

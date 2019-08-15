@@ -1,7 +1,7 @@
 <template>
 
   <v-card class="mb-3">
-    <v-card-title>
+    <v-card-title class="custom-card-title">
 
       <v-flex
         md10
@@ -151,5 +151,9 @@
   .snippet-content-container {
     background-color: $description-grey;
     border-radius: 6px;
+  }
+
+  .custom-card-title {
+    flex-wrap: nowrap !important;
   }
 </style>

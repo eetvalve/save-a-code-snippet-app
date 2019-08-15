@@ -104,7 +104,7 @@
     background-color: $support-text;
   }
 
-  @media screen and (max-width: 767px) {
+  @media screen and (max-width: 950px) {
     .list-overflow {
       max-width: 226px;
       height: 80vh !important;
