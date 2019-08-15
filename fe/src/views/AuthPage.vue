@@ -13,8 +13,7 @@
             label="code"
             type="password"
             v-model="secureCode"
-            @keyup.enter.native="validateCode()"
-          />
+            @keyup.enter.native="validateCode()"></v-text-field>
         </v-card-text>
 
         <v-card-actions>
@@ -42,8 +41,7 @@
             hint="You can use pre-exisiting name if you like"
             v-model="userName"
             ref="name"
-            @keyup.enter.native="validateUserName()"
-          />
+            @keyup.enter.native="validateUserName()"></v-text-field>
         </v-card-text>
 
         <v-card-actions>
