@@ -72,6 +72,9 @@
 
   export default {
     name: "AuthPage",
+    created() {
+      this.isAllreadyLoggedIn()
+    },
     data() {
       return {
         secureCode: '',
@@ -87,6 +90,11 @@
     },
     methods: {
       ...mapActions(['getUser']),
+      isAllreadyLoggedIn() {
+        if(localStorage.getItem('token') && localStorage.getItem('user')) {
+          this.$router.push('/')
+        }
+      },
       validateCode() {
         userService.validateSecureCode({secureCode: this.secureCode})
           .then(res => {

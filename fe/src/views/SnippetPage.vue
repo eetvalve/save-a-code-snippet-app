@@ -56,7 +56,8 @@
         this.isTopOfPage = window.scrollY <= 0
         const element = document.getElementById('snippetGap')
 
-        if (!this.isTopOfPage) {
+        if (!this.isTopOfPage && window.innerWidth > 950) {
+          console.log('inner width greater that 950')
           element.style.marginTop = this.addNewComponentHeight + "px";
         } else {
           element.style.marginTop = "0px"

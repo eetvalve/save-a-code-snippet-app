@@ -58,10 +58,6 @@
 </script>
 
 <style scoped>
-  .addSnippetContainer {
-    width: 91%;
-    max-width: 793px;
-  }
 
   .add-new-borders {
     padding: 8px 5px;
@@ -70,8 +66,15 @@
     max-width: inherit;
   }
 
-  .fixedTop {
-    position: fixed;
-    z-index: 100;
+  @media screen and (min-width: 950px) {
+    .addSnippetContainer {
+      width: 91%;
+      max-width: 793px;
+    }
+
+    .fixedTop {
+      position: fixed;
+      z-index: 100;
+    }
   }
 </style>

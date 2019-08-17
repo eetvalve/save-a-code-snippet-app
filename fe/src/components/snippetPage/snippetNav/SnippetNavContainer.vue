@@ -117,7 +117,7 @@
     }
 
     .nav-container-list-closed {
-      left: -240px;
+      left: -260px;
     }
 
     .nav-container-list-open {
