@@ -9,9 +9,3 @@ handlers:
 - url: /.*
   static_files: dist/index.html
   upload: dist/index.html
-manual_scaling:
-  instances: 1
-resources:
-  cpu: 0.5 # 1
-  memory_gb: 0.5 # 2
-  disk_size_gb: 10 # 10 is minimum
