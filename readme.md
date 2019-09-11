@@ -27,14 +27,14 @@ App where you can store all snippets/notes what you might consider useful in the
 
 
 ## Deployment:
-Currently deployed to google cloud services using docker-containers
+Currently deployed to google cloud services (gke) using docker-containers, ingress-loadbalancing, hpa (horizontal pod autoscaling) and custom node-pool.
 
-<b>frontend:</b> google app-engine   
-<b>backend:</b> google app-engine   
+<b>frontend:</b> google kubernetes engine   
+<b>backend:</b> google kubernetes engine   
 <b>db:</b> google cloud sql  
 
 <b>other:</b>   
 google build-triggers when changes are pushed to master (github)
 
 
-Url: https://frontend-dot-create-a-code-snippet.appspot.com/#/
+Url: <a href="http://34.102.153.220/">save-a-code-snippet-app</a>
